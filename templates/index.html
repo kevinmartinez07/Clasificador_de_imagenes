@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Clasificador de Productos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f4f6f8; padding-top: 50px; padding-bottom: 50px; }
+    .card { max-width: 650px; margin: auto; }
+  </style>
+</head>
+<body>
+<div class="card shadow">
+  <div class="card-header bg-primary text-white text-center">
+    <h3>Clasificador de Productos</h3>
+    <p class="mb-0 small">Predice imágenes y gestiona tu modelo entrenado</p>
+  </div>
+  <div class="card-body">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="alert alert-{{ category }} text-center">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <form action="/reemplazar_modelo" method="POST" enctype="multipart/form-data" class="mb-4 text-center">
+      <div class="input-group">
+        <input type="file" name="modelo" class="form-control" required>
+        <button class="btn btn-warning">Reemplazar Modelo</button>
+      </div>
+    </form>
+
+    {% if entrenado %}
+    <form method="POST" enctype="multipart/form-data" class="text-center mb-3">
+      <input type="file" name="imagen" class="form-control mb-2" required>
+      <button type="submit" class="btn btn-success">Clasificar Imagen</button>
+    </form>
+    {% else %}
+    <div class="alert alert-danger text-center">
+      El modelo aún no ha sido entrenado o cargado.
+    </div>
+    {% endif %}
+
+    {% if pred %}
+    <div class="text-center">
+      <h5 class="text-primary">Resultado: <strong>{{ pred }}</strong></h5>
+      <img src="{{ img_url }}" class="img-thumbnail mt-3" width="280">
+    </div>
+    {% endif %}
+  </div>
+  
+</div>
+</body>
+</html>
